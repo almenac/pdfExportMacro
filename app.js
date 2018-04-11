@@ -24,14 +24,22 @@ app.get("/", function(req, res){
 
 //rpgs route
 
+// app.get("/rpgs", function(req, res){
+//     // store SQL count query in variable
+//     var q = "SELECT COUNT(*) as count FROM rpgs";
+//     //perform query with callback
+//     connection.query(q, function(err, results){
+//         if(err) throw err;
+//         var count = (results[0].count);
+//         res.render("rpgs", {count: count});
+//     });
+// });
+
 app.get("/rpgs", function(req, res){
-    // store SQL count query in variable
-    var q = "SELECT COUNT(*) as count FROM rpgs"
-    //perform query with callback
-    connection.query(q, function(err, results){
-        if(err) throw err
-        var count = (results[0].count);
-        res.render("rpgs", {count: count});
+    var q = "SELECT * FROM rpgs";
+    connection.query(q, function(err, rpgs){
+        if(err) throw err;
+        res.render("rpgs", {rpgs: rpgs});
     });
 });
 

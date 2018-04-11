@@ -7,20 +7,12 @@
     <body>
         <h1>Database of owned rpg books</h1>
         
-        <p>There are currently <strong><%= count %></strong> rpg books in the database.</p>
-        
-        <h2>RPG list</h2>
-        <p>Name: Hellfrost Action Deck</p>
-        <ul>
-            <li>System: Savage Worlds</li>
-            <li>Setting: Hellfrost</li>
-            <li>Product type: Supplement</li>
-            <li>Product form: pdf</li>
-            <li>Read: No</li>
-            <li>Genre: Fantasy</li>
-        </ul>
+        <% rpgs.forEach(function(rpg){ %>
+            <p><%= rpg.name %></p>
+        <% }) %>
         
         <p>Back to <a href="/">home page</a>.</p>
         
     </body>
 </html>
+
