@@ -25,8 +25,15 @@ app.get("/", function(req, res){
 //rpgs route
 
 app.get("/rpgs", function(req, res){
-    res.render("rpgs");
-})
+    // store SQL count query in variable
+    var q = "SELECT COUNT(*) as count FROM rpgs"
+    //perform query with callback
+    connection.query(q, function(err, results){
+        if(err) throw err
+        var count = (results[0].count);
+        res.render("rpgs", {count: count});
+    });
+});
 
 
 //INITIATE SERVER
