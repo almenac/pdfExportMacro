@@ -13,6 +13,47 @@ var connection = mysql.createConnection({
 // App configs
 
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public"));
+
+// DATABASE SETUP
+
+var createRpgTable = 'CREATE TABLE IF NOT EXISTS rpgs('
+    + "id INT AUTO_INCREMENT PRIMARY KEY,"
+    + "name VARCHAR(255) NOT NULL,"
+    + "system VARCHAR(100),"
+    + "setting VARCHAR(100),"
+    + "product_type VARCHAR(100),"
+    + "product_form VARCHAR(100),"
+    + "is_read VARCHAR(25),"
+    + "genre VARCHAR(100),"
+    + "created_at TIMESTAMP DEFAULT NOW()"
+    +  ')';
+
+var insertSeed = 'INSERT INTO rpgs (name, system, setting, product_type, product_form, is_read, genre) VALUES'
+    + "('Hellfrost Action Deck', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
+    + "('Toinen Hellfrost-tuote', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
+    + "('Kolmas Hellfrost-tuote', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy');"
+    
+// Drop database rpg_list if it exists
+connection.query("DROP DATABASE IF EXISTS rpg_list", function(err){
+    if(err) throw err;
+    // Create database rpg_list
+    connection.query('CREATE DATABASE rpg_list', function (err) {
+        if (err) throw err;
+        // Use created rpg_list
+        connection.query('USE rpg_list', function (err) {
+            if (err) throw err;
+            // Create table "rpgs" from variable
+            connection.query(createRpgTable, function (err) {
+                    if (err) throw err;
+                    // Insert seed data from variable
+                    connection.query(insertSeed, function(err) {
+                        if(err) throw err;
+                });
+            });
+        });
+    });
+});
 
 //ROUTES
 
@@ -23,17 +64,6 @@ app.get("/", function(req, res){
 });
 
 //rpgs route
-
-// app.get("/rpgs", function(req, res){
-//     // store SQL count query in variable
-//     var q = "SELECT COUNT(*) as count FROM rpgs";
-//     //perform query with callback
-//     connection.query(q, function(err, results){
-//         if(err) throw err;
-//         var count = (results[0].count);
-//         res.render("rpgs", {count: count});
-//     });
-// });
 
 app.get("/rpgs", function(req, res){
     var q = "SELECT * FROM rpgs";
