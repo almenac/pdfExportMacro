@@ -63,7 +63,7 @@ app.get("/", function(req, res){
     res.render("home");
 });
 
-//rpgs route
+//INDEX route
 
 app.get("/rpgs", function(req, res){
     var q = "SELECT * FROM rpgs";
@@ -72,6 +72,10 @@ app.get("/rpgs", function(req, res){
         res.render("rpgs", {rpgs: rpgs});
     });
 });
+
+//Post route
+
+
 
 
 //INITIATE SERVER
