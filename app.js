@@ -3,6 +3,7 @@
 var express = require("express");
 var app = express();
 var mysql = require("mysql");
+var bodyParser = require("body-parser");
 
 var connection = mysql.createConnection({
    host: "localhost",
@@ -14,6 +15,7 @@ var connection = mysql.createConnection({
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // DATABASE SETUP
 
@@ -63,6 +65,10 @@ app.get("/", function(req, res){
     res.render("home");
 });
 
+app.get("/home", function(req, res){
+    res.redirect("/");
+});
+
 //INDEX route
 
 app.get("/rpgs", function(req, res){
@@ -73,8 +79,47 @@ app.get("/rpgs", function(req, res){
     });
 });
 
-//Post route
+//New route
 
+app.get("/new", function(req,res){
+   res.render("new");
+});
+
+//Create route
+
+// app.post("/new", function(req, res){
+//     var rpg = {
+//         name: req.body.name,
+//         system: req.body.system,
+//         setting: req.body.setting,
+//         product_type: req.body.product_type,
+//         product_form: req.body.product_form,
+//         is_read: req.body.is_read,
+//         genre: req.body.genre
+//     };
+    
+//     connection.query("INSERT INTO rpgs SET ?", rpg, function(err, result){
+//       if(err) throw err;
+//       res.redirect("/rpgs");
+//     });
+// });
+
+app.post("/new", function(req, res){
+    // var rpg = {
+    //     name: req.body.name,
+    //     system: req.body.system,
+    //     setting: req.body.setting,
+    //     product_type: req.body.product_type,
+    //     product_form: req.body.product_form,
+    //     is_read: req.body.is_read,
+    //     genre: req.body.genre
+    // };
+    
+    connection.query("INSERT INTO rpgs SET ?", req.body.rpg, function(err, result){
+       if(err) throw err;
+       res.redirect("/rpgs");
+    });
+});
 
 
 
