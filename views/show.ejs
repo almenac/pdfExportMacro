@@ -1,0 +1,19 @@
+<% include partials/header %>
+    
+<h1>File for single rpg</h1>
+
+<p><strong><%= rpg.name %></strong><p>
+
+<ul>
+    <li>Game System: <%= rpg.system %></li>
+    <li>Setting: <%= rpg.setting %></li>
+    <li>Product type: <%= rpg.product_type %></li>
+    <li>Read: <%= rpg.is_read %></li>
+</ul>
+
+
+<p>Back to <a href="/rpgs">RPG list</a>.</p>
+
+<% include partials/footer %>        
+    
+

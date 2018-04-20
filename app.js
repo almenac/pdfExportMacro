@@ -33,8 +33,8 @@ var createRpgTable = 'CREATE TABLE IF NOT EXISTS rpgs('
 
 var insertSeed = 'INSERT INTO rpgs (name, system, setting, product_type, product_form, is_read, genre) VALUES'
     + "('Hellfrost Action Deck', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
-    + "('Toinen Hellfrost-tuote', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
-    + "('Kolmas Hellfrost-tuote', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy');"
+    + "('Second Hellfrost product', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
+    + "('Third Hellfrost product', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy');"
     
 // Drop database rpg_list if it exists
 connection.query("DROP DATABASE IF EXISTS rpg_list", function(err){
@@ -58,6 +58,7 @@ connection.query("DROP DATABASE IF EXISTS rpg_list", function(err){
 });
 
 //ROUTES
+//======
 
 //Root route
 
@@ -79,14 +80,38 @@ app.get("/rpgs", function(req, res){
     });
 });
 
-//New route
+//NEW route
 
 app.get("/new", function(req,res){
    res.render("new");
 });
 
-//Create route
+//SHOW route
 
+// app.get("/rpgs/:id", function(req, res){
+//     res.send(req.params.id);
+//     var q = 'SELECT * FROM rpgs WHERE id='+req.params.id;
+//     connection.query(q, function(err, results, fields){
+//         if(err) throw err;
+//         console.log(results[0]);
+//         // res.render("show", {rpg: results});
+//     });
+// });
+
+app.get("/rpgs/:id", function(req, res){
+    var q = 'SELECT * FROM rpgs WHERE id='+req.params.id;
+    connection.query(q, function(err, results, fields){
+        if(err) {
+            console.log(err)
+        }
+        // res.send(results);
+        res.render("show", {rpg: results});
+    });
+});
+
+//CREATE route
+
+// Old version
 // app.post("/new", function(req, res){
 //     var rpg = {
 //         name: req.body.name,
@@ -105,16 +130,6 @@ app.get("/new", function(req,res){
 // });
 
 app.post("/new", function(req, res){
-    // var rpg = {
-    //     name: req.body.name,
-    //     system: req.body.system,
-    //     setting: req.body.setting,
-    //     product_type: req.body.product_type,
-    //     product_form: req.body.product_form,
-    //     is_read: req.body.is_read,
-    //     genre: req.body.genre
-    // };
-    
     connection.query("INSERT INTO rpgs SET ?", req.body.rpg, function(err, result){
        if(err) throw err;
        res.redirect("/rpgs");

@@ -1,21 +1,14 @@
 <% include partials/header %>
     
-<h1>Database of owned rpg books</h1>
+<h1>List of RPGs</h1> 
 
-<p>This is a paragraph</p>
+<ul>
 
 <% rpgs.forEach(function(rpg){ %>
-    
-    <p><strong><%= rpg.name %></strong><p>
-    <ul>
-        <li>Game System: <%= rpg.system %></li>
-        <li>Setting: <%= rpg.setting %></li>
-        <li>Product type: <%= rpg.product_type %></li>
-        <li>Read: <%= rpg.is_read %></li>
-    </ul>
+    <li><a href="/rpgs/<%= rpg.id %>"><%= rpg.name %></a></li>
 <% }) %>
 
-<p>Back to <a href="/">home page</a>.</p>
+</ul>
 
 <% include partials/footer %>        
     
