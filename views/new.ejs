@@ -1,9 +1,38 @@
 <% include partials/header %>
 
-<form action="/new" method="POST">
-    <input type=text name="rpg[name]" placeholder="RPG name here"></input>
-    <input type=text name="rpg[system]" placeholder="System name here"></input>
-    <button>Submit new RPG</button>
-</form>
+<div class="container">
+    <form action="/new" method="POST">
+        <div class="form-group">
+            <label for="name">RPG Name</label>
+            <input type=text class="form-control" id="name" name="rpg[name]" placeholder="RPG name here"></input>
+        </div>
+        <div class="form-group">
+            <label for="system">Rule System</label>
+            <input type=text class="form-control" id="system" name="rpg[system]" placeholder="Enter RPG rule system"></input>
+        </div>
+        <div class="form-group">
+            <label for="setting">Campaign Setting</label>
+            <input type=text class="form-control" id="setting" name="rpg[setting]" placeholder="Campaign Setting (or N/A)"></input>
+        </div>
+        <div class="form-group">
+            <label for="product_type">Type of Product</label>
+            <input type=text class="form-control" id="product_type" name="rpg[product_type]" placeholder="Type of product (adventure, Core book, etc.)"></input>
+        </div>
+        <div class="form-group">
+            <label for="product_form">Form of Product</label>
+            <input type=text class="form-control" id="product_form" name="rpg[product_form]" placeholder="Form of product (Physical, pdf, etc.)"></input>
+        </div>
+        <div class="form-group">
+            <label for="genre">Genre</label>
+            <input type=text class="form-control" id="genre" name="rpg[genre]" placeholder="Product's genre, if applicable"></input>
+        </div>
+        <div class="form-group">
+            <label for="is_read">Is it read?</label>
+            <input type=text class="form-control" id="is_read" name="rpg[is_read]" placeholder="Have you read it yet?"></input>
+        </div>
+        <button type="submit" class="btn btn-default">Submit new RPG</button>
+    </form>    
+</div>
+
 
 <% include partials/footer %>

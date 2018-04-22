@@ -103,9 +103,10 @@ app.get("/rpgs/:id", function(req, res){
     connection.query(q, function(err, results, fields){
         if(err) {
             console.log(err)
-        }
-        // res.send(results);
-        res.render("show", {rpg: results});
+            res.redirect("/")
+        } else {
+            res.render("show", {rpg: results[0]});    
+        };
     });
 });
 
