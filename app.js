@@ -4,6 +4,7 @@ var express = require("express");
 var app = express();
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 
 var connection = mysql.createConnection({
    host: "localhost",
@@ -16,6 +17,7 @@ var connection = mysql.createConnection({
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 // DATABASE SETUP
 
@@ -88,16 +90,6 @@ app.get("/new", function(req,res){
 
 //SHOW route
 
-// app.get("/rpgs/:id", function(req, res){
-//     res.send(req.params.id);
-//     var q = 'SELECT * FROM rpgs WHERE id='+req.params.id;
-//     connection.query(q, function(err, results, fields){
-//         if(err) throw err;
-//         console.log(results[0]);
-//         // res.render("show", {rpg: results});
-//     });
-// });
-
 app.get("/rpgs/:id", function(req, res){
     var q = 'SELECT * FROM rpgs WHERE id='+req.params.id;
     connection.query(q, function(err, results, fields){
@@ -107,6 +99,29 @@ app.get("/rpgs/:id", function(req, res){
         } else {
             res.render("show", {rpg: results[0]});    
         };
+    });
+});
+
+//EDIT route
+
+app.get("/rpgs/:id/edit", function(req, res){
+    var q = 'SELECT * FROM rpgs WHERE id='+req.params.id;
+    connection.query(q, function(err, results, fields){
+        if(err) {
+            res.redirect("/");
+        } else {
+            res.render("edit", {rpg: results[0]});
+        }
+    });
+});
+
+//UPDATE route
+
+app.put("/rpgs/:id", function(req, res){
+    var q = "UPDATE rpgs SET ? WHERE id="+req.params.id;
+    connection.query(q, req.body.rpg, function(err,result){
+        if(err) throw err;
+        res.redirect("/rpgs");
     });
 });
 
@@ -130,7 +145,7 @@ app.get("/rpgs/:id", function(req, res){
 //     });
 // });
 
-app.post("/new", function(req, res){
+app.post("/rpgs", function(req, res){
     connection.query("INSERT INTO rpgs SET ?", req.body.rpg, function(err, result){
        if(err) throw err;
        res.redirect("/rpgs");
