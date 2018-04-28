@@ -59,8 +59,9 @@ connection.query("DROP DATABASE IF EXISTS rpg_list", function(err){
     });
 });
 
+//===========================================
 //ROUTES
-//======
+//===========================================
 
 //Root route
 
@@ -77,8 +78,12 @@ app.get("/home", function(req, res){
 app.get("/rpgs", function(req, res){
     var q = "SELECT * FROM rpgs";
     connection.query(q, function(err, rpgs){
-        if(err) throw err;
-        res.render("rpgs", {rpgs: rpgs});
+        if(err) { 
+            console.log(err);
+            res.redirect("/")
+        } else {
+            res.render("rpgs", {rpgs: rpgs});    
+        }
     });
 });
 
@@ -86,6 +91,15 @@ app.get("/rpgs", function(req, res){
 
 app.get("/new", function(req,res){
    res.render("new");
+});
+
+//CREATE route
+
+app.post("/rpgs", function(req, res){
+    connection.query("INSERT INTO rpgs SET ?", req.body.rpg, function(err, result){
+       if(err) throw err;
+       res.redirect("/rpgs");
+    });
 });
 
 //SHOW route
@@ -119,39 +133,33 @@ app.get("/rpgs/:id/edit", function(req, res){
 
 app.put("/rpgs/:id", function(req, res){
     var q = "UPDATE rpgs SET ? WHERE id="+req.params.id;
-    connection.query(q, req.body.rpg, function(err,result){
-        if(err) throw err;
-        res.redirect("/rpgs");
+    connection.query(q, req.body.rpg, function(err,results){
+        if(err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            res.redirect("/rpgs/"+req.params.id);    
+        }
     });
 });
 
-//CREATE route
-
-// Old version
-// app.post("/new", function(req, res){
-//     var rpg = {
-//         name: req.body.name,
-//         system: req.body.system,
-//         setting: req.body.setting,
-//         product_type: req.body.product_type,
-//         product_form: req.body.product_form,
-//         is_read: req.body.is_read,
-//         genre: req.body.genre
-//     };
-    
-//     connection.query("INSERT INTO rpgs SET ?", rpg, function(err, result){
-//       if(err) throw err;
-//       res.redirect("/rpgs");
-//     });
-// });
-
-app.post("/rpgs", function(req, res){
-    connection.query("INSERT INTO rpgs SET ?", req.body.rpg, function(err, result){
-       if(err) throw err;
-       res.redirect("/rpgs");
-    });
+//DELETE route
+app.delete("/rpgs/:id", function(req, res){
+   var q = "DELETE FROM rpgs WHERE id="+req.params.id;
+   connection.query(q, req.body.rpg, function(err, results){
+       if(err) {
+           console.log(err);
+           res.redirect("/")
+       } else {
+           res.redirect("/rpgs");
+       }
+   });
 });
 
+//Catch-all -route
+app.get("*", function(req, res){
+    res.redirect("/")
+});
 
 
 //INITIATE SERVER

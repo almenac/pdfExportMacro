@@ -1,18 +1,24 @@
 <% include partials/header %>
     
-<h1>File for single rpg</h1>
+<div class="container">
+  <h1><%= rpg.name %></h1>
+  
+  <ul>
+      <li>Game System: <%= rpg.system %></li>
+      <li>Setting: <%= rpg.setting %></li>
+      <li>Product type: <%= rpg.product_type %></li>
+      <li>Read: <%= rpg.is_read %></li>
+  </ul>
+  
+  <a href="/rpgs/<%= rpg.id %>/edit" class="btn btn-info">Edit</a>
+  
+  <form id="delete" action="/rpgs/<%= rpg.id %>?_method=DELETE" method="POST">
+    <button class="btn btn-danger">Delete</button>
+  </form>
+  
+  <p>Back to <a href="/rpgs">RPG list</a>.</p>    
+</div>
 
-<p><strong><%= rpg.name %></strong><p>
-
-<ul>
-    <li>Game System: <%= rpg.system %></li>
-    <li>Setting: <%= rpg.setting %></li>
-    <li>Product type: <%= rpg.product_type %></li>
-    <li>Read: <%= rpg.is_read %></li>
-</ul>
-
-
-<p>Back to <a href="/rpgs">RPG list</a>.</p>
 
 <% include partials/footer %>        
     

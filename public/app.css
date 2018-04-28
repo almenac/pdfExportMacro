@@ -6,3 +6,11 @@ ul {
 form {
   margin-bottom: 15px;
 }
+
+.footer {
+  margin-top: 10%;
+}
+
+#delete {
+  display: inline;
+}
