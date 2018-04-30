@@ -1,5 +1,5 @@
 <% include partials/header %>
-    
+
 <div class="container">
   <h1><%= rpg.name %></h1>
   
@@ -7,7 +7,10 @@
       <li>Game System: <%= rpg.system %></li>
       <li>Setting: <%= rpg.setting %></li>
       <li>Product type: <%= rpg.product_type %></li>
+      <li>Product form: <%= rpg.product_form %></li>
       <li>Read: <%= rpg.is_read %></li>
+      <li>Genre: <%= rpg.genre %></li>
+      <li>Creation time: <%= rpg.created_at %></li>
   </ul>
   
   <a href="/rpgs/<%= rpg.id %>/edit" class="btn btn-info">Edit</a>
