@@ -9,7 +9,8 @@ var methodOverride = require("method-override");
 var connection = mysql.createConnection({
    host: "localhost",
    user: "almenac",
-   database: "rpg_list"
+   database: "rpg_list",
+   multipleStatements: "true"
 });
 
 // App configs
@@ -36,7 +37,7 @@ var createRpgTable = 'CREATE TABLE IF NOT EXISTS rpgs('
 var insertSeed = 'INSERT INTO rpgs (name, system, setting, product_type, product_form, is_read, genre) VALUES'
     + "('Hellfrost Action Deck', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
     + "('Second Hellfrost product', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy'),"
-    + "('Third Hellfrost product', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'No', 'Fantasy');"
+    + "('Third Hellfrost product', 'Savage Worlds', 'Hellfrost', 'Supplement', 'pdf', 'Yes', 'Fantasy');"
     
 // Drop database rpg_list if it exists
 connection.query("DROP DATABASE IF EXISTS rpg_list", function(err){
@@ -77,14 +78,43 @@ app.get("/home", function(req, res){
 
 app.get("/rpgs", function(req, res){
     var q = "SELECT * FROM rpgs";
-    connection.query(q, function(err, rpgs){
-        if(err) { 
-            console.log(err);
-            res.redirect("/")
-        } else {
-            res.render("rpgs", {rpgs: rpgs});    
-        }
-    });
+    var q2 = "SELECT COUNT(*) as count FROM rpgs";
+    connection.query(q2, function(err, results, fields){
+        if(err) throw err;
+        connection.query(q, function(err, rpgs){
+            if(err) { 
+                console.log(err);
+                res.redirect("/")
+            } else {
+                res.render("rpgs", {rpgs: rpgs, count: results[0].count});
+            }
+        });    
+    })
+});
+
+// app.get("/rpgs", function(req, res){
+//     var q = "SELECT * FROM rpgs";
+//     connection.query(q, function(err, rpgs){
+//         if(err) { 
+//             console.log(err);
+//             res.redirect("/")
+//         } else {
+//             res.render("rpgs", {rpgs: rpgs});    
+//         }
+//     });
+// });
+
+//INDEX of unread
+app.get("/rpgs/unread", function(req, res){
+   var q = "SELECT * FROM rpgs WHERE is_read='No'";
+   connection.query(q, function(err, results, fields){
+       if(err) {
+           console.log(err);
+           res.redirect("/");
+       } else {
+           res.render("unread", {rpgs: results})
+       }
+   })
 });
 
 //NEW route
